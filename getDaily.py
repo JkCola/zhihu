@@ -5,12 +5,13 @@ from bs4 import BeautifulSoup
 import MySQLdb
 import genHtml
 
+import sys
+
 
 if __name__ == '__main__':
-
-    # str = u'中问'
-    # print str.encode('utf-8')
-
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+    
     reqUrlStr = 'http://daily.zhihu.com/'
     reqHeaders = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36'
