@@ -46,22 +46,6 @@ if __name__ == '__main__':
     isChanged = True if retNum > 0 and ret[0][0] < 1 else False
     print 'isChanged: ', isChanged
 
-    # 如果没有被处理过，即当前获取的页面变化了
-    if isChanged == True:
-        # 记录当前获取的页面的md5，用来后续判断
-        sqlStr = 'insert into zhihu_site_md5 (md5) values (%s);'
-        cur.execute(sqlStr, (md5Str, ))
-
-        aTags = []
-        for aTag in soup.find_all('a'):
-            url = aTag.get('href')
-            # 过滤、只得到真正的知乎日报url
-            if url.find('daily.zhihu.com/story') >= 0:
-                title = aTag.span.string
-                aTags.append( (url, title) )
-        # 数据入库
-        sqlStr = "insert ignore into zhihu_daily (url, title) values (%s, %s);"
-        print 'update total number: ', cur.executemany(sqlStr, aTags)# 如果没有被处理过，即当前获取的页面变化了
     if isChanged == True:
         # 记录当前获取的页面的md5，用来后续判断
         sqlStr = 'insert into zhihu_site_md5 (md5) values (%s);'
