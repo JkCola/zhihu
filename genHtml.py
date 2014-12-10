@@ -1,6 +1,6 @@
 # coding: utf-8
 
-htmlStr = '''
+htmlTpl = '''
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head>
@@ -19,15 +19,30 @@ htmlStr = '''
 }
 .day_stories {
     box-shadow: 1px 1px 10px 4px #f0f0f0;
-    padding: 10px 100px;
+    padding: 10px 70px;
+    clear: both;
 }
 .day_stories .story_date {
     font-size: 20px;
     width: inherit;
-
+    font-weight: bold;
 }
 .day_stories .story_url {
-    
+    width: inherit;
+    height: 50px;
+    margin: 2px 0px;
+    color: #4B5CC4;
+    font-weight: bold;
+    font-size: 10px;
+}
+.day_stories .story_url:hover {
+    text-shadow: 0px 0px 10px #EF7A82;
+}
+.day_stories .story_url span {}
+.day_stories .story_url img {
+    height: 50px;
+    width: 50px;
+    margin-right: 20px;
 }
         </style>
     </head>
@@ -43,6 +58,22 @@ htmlStr = '''
     console.log('Email: jk.wong@qq.com');
 </script>
 '''
+dayStoriesTpl = '''
+<div class="row day_stories"><div class="col-md-12">
+    <div class="story_date">
+        <span>{{day_stories_title}}</span>
+    </div>
+    {{story_url_body}}
+</div></div>
+'''
+storyUrlTpl = '''
+<div class="story_url">
+    <a href="{{story_url}}" target="_blank">
+        <img src="{{story_img_src}}" alt="">
+        <span>{{story_title}}</span>
+    </a>
+</div>
+'''
 def do(stories):
     storyGroupByDate = {}
     for row in stories:
@@ -50,43 +81,27 @@ def do(stories):
             'id': row[0],
             'url': row[1],
             'title': row[2],
-            'create_time': row[3]
+            'imgSrc': row[3],
+            'create_time': row[4]
         }
         ymd = story['create_time'].strftime('%Y-%m-%d')
         if ymd not in storyGroupByDate:
             storyGroupByDate[ymd] = []
         storyGroupByDate[ymd].append(story)
 
-    htmlList = []
+    dayStoriesList = []
     for ymd in storyGroupByDate:
-        htmlList.append('''
-            <div class="row day_stories"><div class="col-md-12">
-                <div class="story_date">
-                    <span>
-            ''')
-        htmlList.append(ymd)
-        htmlList.append('''
-                    </span>
-                </div>
-            ''')
+        storyUrlList = []
         for story in storyGroupByDate[ymd]:
-            htmlList.append('''
-                <div class="story_url">
-                    <a href="
-                ''')
-            htmlList.append(story['url'])
-            htmlList.append('''">''')
-            htmlList.append(story['title'])
-            htmlList.append('''
-                    </a>
-                </div>
-                ''')
-        htmlList.append('''
-            </div></div>
-            ''')
-    # print ''.join(htmlList)
+            htmlStr = storyUrlTpl.replace('{{story_img_src}}', story['imgSrc'])\
+                        .replace('{{story_url}}', story['url'])\
+                        .replace('{{story_title}}', story['title'])
+            storyUrlList.append(htmlStr)
+        htmlStr = dayStoriesTpl.replace('{{day_stories_title}}', ymd)\
+                    .replace('{{story_url_body}}', ''.join(storyUrlList))
+        dayStoriesList.append(htmlStr)
     fileObj = open('zhihu.html', 'w')
-    fileObj.write( htmlStr.replace('{{day_stories_body}}', ''.join(htmlList)) )
+    fileObj.write( htmlTpl.replace('{{day_stories_body}}', ''.join(dayStoriesList)) )
     fileObj.close()
 
 if __name__ == '__main__':
