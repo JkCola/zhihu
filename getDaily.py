@@ -2,8 +2,7 @@
 import urllib, urllib2
 import hashlib
 from bs4 import BeautifulSoup
-import MySQLdb
-import genHtml
+import genHtml, db
 
 import sys
 
@@ -28,15 +27,8 @@ if __name__ == '__main__':
     soup = BeautifulSoup(body)
     print 'md5Str: ', md5Str
 
-    # 链接数据库
-    conn = MySQLdb.connect(
-            host = 'localhost',
-            port = 3306,
-            user = 'root',
-            passwd = 'root',
-            db = 'zhihu'
-        )
-    conn.set_character_set('utf8')
+    # 链接数据库，只是为了隐藏： MySQLdb.connect(host = 'localhost', port = 3306, user = 'root', passwd = 'root', db = 'zhihu')
+    conn = db.getConnection()
     cur = conn.cursor()
 
     # 判断当前获取的页面是否已经处理过
