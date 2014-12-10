@@ -34,6 +34,10 @@ htmlTpl = '''
     color: #4B5CC4;
     font-weight: bold;
     font-size: 10px;
+
+    height: 20px;
+    line-height: 20px;
+    font-weight: normal;
 }
 .day_stories .story_url:hover {
     text-shadow: 0px 0px 10px #EF7A82;
@@ -61,7 +65,7 @@ htmlTpl = '''
 dayStoriesTpl = '''
 <div class="row day_stories"><div class="col-md-12">
     <div class="story_date">
-        <span>{{day_stories_title}}</span>
+        <span># {{day_stories_title}}</span>
     </div>
     {{story_url_body}}
 </div></div>
@@ -69,7 +73,7 @@ dayStoriesTpl = '''
 storyUrlTpl = '''
 <div class="story_url">
     <a href="{{story_url}}" target="_blank">
-        <img src="{{story_img_src}}" alt="">
+        <!-- <img src="{{story_img_src}}" alt=""> -->
         <span>{{story_title}}</span>
     </a>
 </div>
