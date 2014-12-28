@@ -2,13 +2,13 @@
 
 import MySQLdb
 
-def getConnection():
+def getConnection(dbName):
     conn = MySQLdb.connect(
             host = 'localhost',
             port = 3306,
             user = 'root',
             passwd = 'root',
-            db = 'zhihu'
+            db = dbName
         )
     conn.set_character_set('utf8')
     return conn
